@@ -12,7 +12,7 @@
     
     <body>
         <py-config>
-            packages = ["Janome","pandas","Ipython"]
+            packages = ["Janome","pandas"]
             [[fetch]]
             files = ["./user_dic.csv"]
         </py-config>
@@ -28,7 +28,7 @@
             import re
             from janome.tokenizer import Tokenizer
             import pandas as pd
-            from IPython.display import clear_output
+
 
             gtoken = Tokenizer("user_dic.csv", udic_type="simpledic", udic_enc="utf8")
 

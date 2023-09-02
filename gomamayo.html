@@ -28,10 +28,12 @@
             import re
             from janome.tokenizer import Tokenizer
             import pandas as pd
+            from IPython.display import clear_output
 
             gtoken = Tokenizer("user_dic.csv", udic_type="simpledic", udic_enc="utf8")
 
             def gomamayo():
+              clear_output()
               text = Element("text").value
 
               wlist = []

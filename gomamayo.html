@@ -11,14 +11,90 @@
 
     
     <body>
-        <button py-click="get_now()" class="py-button">現在時刻を取得</button>
-        <div id="now"></div>
+        <py-config>
+            packages = ["Janome","pandas"]
+        </py-config>
+        <input class="py-input" type="text" id="text" size=40 />
+        <button class="py_button" py-click="gomamayo()" type="submit" >ゴママヨを検索</button>
+        <p>ゴママヨ</p>
+        <div id="gomamayo"></div>
+        <p>2項ゴママヨ</p>
+        <div id="gomamayo2"></div>
+        <p>多項ゴママヨ</p>
+        <div id="gomamayo3"></div>
         <py-script>
-            from datetime import datetime
+            import re
+            from janome.tokenizer import Tokenizer
+            import pandas as pd
 
-            def get_now():
-                now = datetime.now()
-                display(f"{now:%Y年%m月%d日 %H:%M:%S}", target="now")
+            gtoken = Tokenizer()
+
+            def gomamayo(text):
+
+              wlist = []
+              #トークン処理
+              for token in gtoken.tokenize(text):
+                wlist.append((token.reading,token.surface,token.part_of_speech.split(',')[0]))
+
+              step = goma1v1(wlist)
+              gomalist = gomajoin(step)
+              result = totable(gomalist)
+
+
+
+
+
+            def goma1v1(wlist):
+              step1 = []
+              for i in range(0,len(wlist) - 1):
+                tmp = find(wlist[i], wlist[i+1])
+                if tmp is not None:
+                  step1.append((i, i+1) + tmp)
+              return step1
+
+
+            def find(tup1,tup2):
+              result = None
+              th = re.compile(r'記号|助詞')
+              if bool(th.search(tup1[2])) or bool(th.search(tup2[2])):
+                return result
+              else:
+                for i in range(1,len(tup1[0]) + 1):
+                  tmp1 = tup1[0][-i:]
+                  tmp2 = tup2[0][:i]
+                  if tmp1 == tmp2:
+                    result = (i, tup1[1], tup2[1])
+                return result
+
+
+            def gomajoin(step1):
+              result = []
+              for  word in step1:
+                if not result:
+                  result.append(word)
+                else:
+                  if word[0] == result[-1][1]:
+                    result[-1] = (result[-1][0], word[1], max(word[2],result[-1][2]), result[-1][3] + result[-1][4], word[4])
+                  else:
+                    result.append(word)
+              return result
+
+
+            def totable(tlist):
+              gomaresult = [[],[],[]]
+              for goma in tlist:
+                size = goma[1] - goma[0] - 1
+                if size > 2:
+                  size = 2
+                gomaresult[size].append([goma[2],goma[3]+goma[4]])
+
+              df = pd.DataFrame(gomaresult[0],columns=["次数","ゴママヨ発生区間"])
+              df1 = pd.DataFrame(gomaresult[1],columns=["次数","ゴママヨ発生区間"])
+              df2 = pd.DataFrame(gomaresult[2],columns=["次数","ゴママヨ発生区間"])
+
+              display(df,target="gomamayo",append = False)
+              display(df1,target="gomamayo2",append = False)
+              display(df2,target="gomamayo3",append = False)                  
         </py-script>
     </body>
 </html>

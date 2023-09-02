@@ -34,6 +34,7 @@
 
             def gomamayo():
               text = Element("text").value
+            　text = re.sub('\[|\]|\(|\)|「|」', '.', text)
 
               wlist = []
               #トークン処理
@@ -59,7 +60,7 @@
 
             def find(tup1,tup2):
               result = None
-              th = re.compile(r'記号|助詞')
+              th = re.compile(r'記号|助詞|助動詞')
               if bool(th.search(tup1[2])) or bool(th.search(tup2[2])):
                 return result
               else:

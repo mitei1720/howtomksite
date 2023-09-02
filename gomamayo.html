@@ -97,9 +97,9 @@
               df1 = pd.DataFrame(gomaresult[1],columns=["次数","ゴママヨ発生区間"])
               df2 = pd.DataFrame(gomaresult[2],columns=["次数","ゴママヨ発生区間"])
 
-              display(df,target="gomamayo",append = False)
-              display(df1,target="gomamayo2",append = False)
-              display(df2,target="gomamayo3",append = False)                  
+              pyscript.write('gomamayo',df)
+              pyscript.write('gomamayo2',df2)
+              pyscript.write('gomamayo3',df3)                  
         </py-script>
     </body>
 </html>

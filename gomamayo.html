@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ゴママヨ発見器</title>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+        <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+        <link rel = "stylesheet" href = "testdesign.css">
+
+    </head>
+
+    
+    <body>
+        <button py-click="get_now()" class="py-button">現在時刻を取得</button>
+        <div id="now"></div>
+        <py-script>
+            from datetime import datetime
+
+            def get_now():
+                now = datetime.now()
+                display(f"{now:%Y年%m月%d日 %H:%M:%S}", target="now")
+        </py-script>
+    </body>
+</html>
